@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot - Consulta de Estado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Consulta el Estado de tu Equipo</h1>
+        <div class="card">
+            <div class="card-body">
+                <form id="consultaForm">
+                    <div class="mb-3">
+                        <label for="idEquipo" class="form-label">ID del Equipo</label>
+                        <input type="text" class="form-control" id="idEquipo" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Consultar</button>
+                </form>
+                <div id="resultado" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#consultaForm').on('submit', function(event) {
+                event.preventDefault();
+                const idEquipo = $('#idEquipo').val();
+                
+                $.ajax({
+                    url: '/api/chatbot/consulta',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ idEquipo: idEquipo }),
+                    success: function(response) {
+                        $('#resultado').html(`<div class="alert alert-success">Estado: ${response.estado}</div>`);
+                    },
+                    error: function() {
+                        $('#resultado').html('<div class="alert alert-danger">Error al consultar el estado. Inténtalo de nuevo.</div>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

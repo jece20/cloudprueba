@@ -1,0 +1,304 @@
+/* Importar Roboto desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+/* Estilos personalizados para mejorar la experiencia de usuario */
+:root {
+    --color-primary: #3a86ff;
+    --color-success: #2ecc71;
+    --color-warning: #f39c12;
+    --color-danger: #e74c3c;
+    --color-info: #3498db;
+    --color-dark: #2c3e50;
+    --color-light: #ecf0f1;
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: 'Roboto Mono', 'Roboto', 'Nunito', monospace, sans-serif;
+    background: linear-gradient(145deg, #5db873 40%, #c0d36e 100%);
+}
+
+/* Para asegurar que los formularios también usen Roboto Mono */
+form, input, select, textarea, button {
+    font-family: 'Roboto Mono', 'Roboto', 'Nunito', monospace, sans-serif;
+}
+
+.btn-toolbar{
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.bi-arrow-left{
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.modal-title{
+    color: #3a86ff;
+    font-weight: bold;
+    align-items: center;
+}
+
+.volver_dashboard {
+    color: #f12a2a;
+    font-weight: bold;
+}
+
+.detalles{
+    color: #fff;
+    font-weight: bold;
+}
+
+.nueser{
+    color: #fff;
+    font-weight: bold;
+}
+
+.dash {
+    color: #fff;
+    font-weight: bold;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #fff;
+    font-weight: bold;
+}
+
+.sidebar .logo {
+    width: 130px;         /* Cambia el tamaño aquí */
+    max-width: 140px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.sidebar .logo:hover {
+    transform: scale(1.08) rotate(-2deg); /* Efecto de escala y leve rotación */
+    box-shadow: 0 8px 24px rgba(58, 134, 255, 0.2); /* Sombra azul suave */
+}
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(135deg, #232526 0%, #5b5e61 50%, #232526 100%);
+    box-shadow: 0 0 24px 2px #232526, 0 0 48px 8px #414345;
+    min-height: 100vh;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 15px;
+}
+
+.sidebar .title {
+    color: #fff;
+    font-size: 1.9rem;
+    font-weight: 700;
+}
+
+.sidebar .logo {
+    max-width: 120px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 12px 15px;
+    margin: 5px 0;
+    border-radius: 5px;
+    transition: all var(--transition-speed);
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: translateX(5px);
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+/* Tarjetas estadísticas */
+.card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-speed);
+    overflow: hidden;
+}
+
+.card-total {
+    background: linear-gradient(135deg, #3a86ff, #00b4d8);
+}
+
+.card-pendientes {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.card-completados {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.card .card-body {
+    padding: 20px;
+}
+
+.card h4 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+/* Tabla */
+.table-responsive {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    background-color: white;
+    margin-bottom: 30px;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table-dark {
+    background-color: var(--color-dark);
+}
+
+.table-actions {
+    white-space: nowrap;
+}
+
+.table-actions .btn {
+    margin: 0 2px;
+    padding: 4px 8px;
+}
+
+/* Badges de estado */
+.badge {
+    padding: 8px 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    transition: all var(--transition-speed);
+}
+
+.badge i {
+    margin-right: 5px;
+}
+
+/* Mejoras para menús desplegables */
+.dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 8px 0;
+    min-width: 180px;
+    border: none;
+    display: block; /* Importante para evitar parpadeos */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(58, 134, 255, 0.1);
+}
+
+.dropdown-item.active {
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.dropdown-item.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Mejoras en los botones */
+.btn-group .dropdown-toggle {
+    transition: all var(--transition-speed);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-group .dropdown-toggle:hover {
+    transform: translateY(-2px);
+}
+
+.btn-outline-success:hover {
+    box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+}
+
+.btn-outline-info:hover {
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Modal de confirmación */
+.modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 15px 20px;
+    border-bottom: none;
+}
+
+.modal-body {
+    padding: 25px 20px;
+}
+
+/* Animaciones y efectos */
+.table tbody tr {
+    transition: all var(--transition-speed);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(52, 152, 219, 0.05);
+    transform: scale(1);
+}
+
+/* Adaptaciones para dispositivos móviles */
+@media (max-width: 768px) {
+    .table-actions {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .table-actions .btn,
+    .table-actions .btn-group {
+        margin-bottom: 5px;
+    }
+    
+    .badge {
+        font-size: 0.7rem;
+        padding: 5px 8px;
+    }
+}
+
+/* Animación para el spinner */
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

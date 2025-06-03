@@ -1,0 +1,142 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<%@ include file="conexion.jsp" %>
+
+<%
+    // Configurar headers para evitar cache
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    
+    String idParam = request.getParameter("id");
+    String nuevoEstado = request.getParameter("estado");
+    boolean exito = false;
+    String mensaje = "";
+    String estadoAnterior = "";
+
+    // Validar parámetros
+    if (idParam == null || nuevoEstado == null || idParam.trim().isEmpty() || nuevoEstado.trim().isEmpty()) {
+        mensaje = "Parámetros inválidos";
+    } else {
+        try {
+            int idDispositivo = Integer.parseInt(idParam);
+            
+            // Validar que el estado sea válido
+            String[] estadosValidos = {"Recibido", "En diagnóstico", "En reparación", "Reparado", "Entregado"};
+            boolean estadoValido = false;
+            for (String estado : estadosValidos) {
+                if (estado.equals(nuevoEstado)) {
+                    estadoValido = true;
+                    break;
+                }
+            }
+            
+            if (!estadoValido) {
+                mensaje = "Estado no válido";
+            } else {
+                // Conexión a la base de datos local
+                /*Class.forName("com.mysql.cj.jdbc.Driver");
+                String url = "jdbc:mysql://localhost:3306/servicio_mantenimiento?useSSL=false&serverTimezone=UTC";
+                String user = "root";
+                String password = "";*/
+                 
+                //online clever-cloud
+                String url = "jdbc:mysql://br4en9dxfl3m20e3tpod-mysql.services.clever-cloud.com:3306/br4en9dxfl3m20e3tpod";
+                String usuario = "ueo7xtdwubyezxwo";
+                String password = "KN8GU2gECoVJX6k6lrw6";
+
+                Connection conexion = DriverManager.getConnection(url, user, password);*/
+                
+                // Iniciar transacción
+                conexion.setAutoCommit(false);
+                
+                try {
+                    // 1. Obtener el estado anterior
+                    PreparedStatement pstSelect = conexion.prepareStatement(
+                        "SELECT estado FROM dispositivos WHERE id_dispositivo = ?"
+                    );
+                    pstSelect.setInt(1, idDispositivo);
+                    ResultSet rs = pstSelect.executeQuery();
+                    
+                    if (rs.next()) {
+                        estadoAnterior = rs.getString("estado");
+                        
+                        // Verificar si el estado realmente cambió
+                        if (estadoAnterior.equals(nuevoEstado)) {
+                            mensaje = "El dispositivo ya se encuentra en el estado: " + nuevoEstado;
+                        } else {
+                            rs.close();
+                            pstSelect.close();
+                            
+                            // 2. Actualizar estado del dispositivo
+                            PreparedStatement pstUpdate = conexion.prepareStatement(
+                                "UPDATE dispositivos SET estado = ? WHERE id_dispositivo = ?"
+                            );
+                            pstUpdate.setString(1, nuevoEstado);
+                            pstUpdate.setInt(2, idDispositivo);
+                            
+                            int filasAfectadas = pstUpdate.executeUpdate();
+                            
+                            if (filasAfectadas > 0) {
+                                // 3. Registrar en historial de estados
+                                PreparedStatement pstHistorial = conexion.prepareStatement(
+                                    "INSERT INTO historial_estados (id_dispositivo, estado_anterior, estado_nuevo, fecha_cambio, usuario) VALUES (?, ?, ?, NOW(), ?)"
+                                );
+                                pstHistorial.setInt(1, idDispositivo);
+                                pstHistorial.setString(2, estadoAnterior);
+                                pstHistorial.setString(3, nuevoEstado);
+                                pstHistorial.setString(4, "admin"); // Cambiar por usuario real si tienes sistema de login
+                                
+                                int historialInsertado = pstHistorial.executeUpdate();
+                                
+                                if (historialInsertado > 0) {
+                                    // Confirmar transacción
+                                    conexion.commit();
+                                    exito = true;
+                                    mensaje = "Estado actualizado correctamente de '" + estadoAnterior + "' a '" + nuevoEstado + "'";
+                                } else {
+                                    conexion.rollback();
+                                    mensaje = "Error al registrar el historial de cambios";
+                                }
+                                
+                                pstHistorial.close();
+                            } else {
+                                conexion.rollback();
+                                mensaje = "No se encontró el dispositivo con ID: " + idDispositivo;
+                            }
+                            
+                            pstUpdate.close();
+                        }
+                    } else {
+                        mensaje = "Dispositivo no encontrado";
+                    }
+                    
+                    if (rs != null && !rs.isClosed()) rs.close();
+                    if (pstSelect != null && !pstSelect.isClosed()) pstSelect.close();
+                    
+                } catch (SQLException e) {
+                    conexion.rollback();
+                    mensaje = "Error en la base de datos: " + e.getMessage();
+                } finally {
+                    if (rs != null) try { rs.close(); } catch (Exception ex) {}
+                    if (pstSelect != null) try { pstSelect.close(); } catch (Exception ex) {}
+                    if (pstUpdate != null) try { pstUpdate.close(); } catch (Exception ex) {}
+                    if (pstHistorial != null) try { pstHistorial.close(); } catch (Exception ex) {}
+                    if (conexion != null) {
+                        try { conexion.setAutoCommit(true); } catch (Exception ex) {}
+                        try { conexion.close(); } catch (Exception ex) {}
+                }
+            }
+            
+        } catch (NumberFormatException e) {
+            mensaje = "ID de dispositivo inválido";
+        } catch (Exception e) {
+            mensaje = "Error del sistema: " + e.getMessage();
+        }
+    }
+%>
+{
+    "exito": <%= exito %>,
+    "mensaje": "<%= mensaje.replace("\"", "\\\"") %>",
+    "estado": "<%= nuevoEstado != null ? nuevoEstado.replace("\"", "\\\"") : "" %>"
+}
