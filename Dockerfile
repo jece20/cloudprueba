@@ -1,14 +1,14 @@
 # Imagen base
-FROM tomcat:9.0-jdk17
+FROM tomcat:8.5-jdk8
 
 # Directorio de trabajo del contenedor
-WORKDIR /usr/local/tomcat/webapps/AFORMULARIO_CLOUD
+WORKDIR /usr/local/tomcat/webapps/aFormularioCloud
 
 # Copia todo el contenido del proyecto JSP (menos los JARs)
-COPY . /usr/local/tomcat/webapps/AFORMULARIO_CLOUD
+COPY . /usr/local/tomcat/webapps/aFormularioCloud
 
 # Copiar librerías necesarias al contenedor
-COPY ./WEB-INF/lib/*.jar /usr/local/tomcat/webapps/AFORMULARIO_CLOUD/WEB-INF/lib/
+COPY ./WEB-INF/lib/*.jar /usr/local/tomcat/webapps/aFormularioCloud/WEB-INF/lib/
 
 # Exponer el puerto
 EXPOSE 8080
