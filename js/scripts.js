@@ -1,4 +1,4 @@
-// Scripts.js - Versión corregida para el manejo de estados
+// Scripts.js
 document.addEventListener('DOMContentLoaded', function () {
     // Configuración de estados
     const estadosConfig = {
@@ -67,60 +67,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para cambiar el estado del dispositivo
     function cambiarEstadoDispositivo(idDispositivo, nuevoEstado) {
-        console.log('Cambiando estado a:', nuevoEstado, 'para dispositivo:', idDispositivo);
-        
-        // Mostrar indicador de carga
-        const btnEstado = filaActual.querySelector('.btn-estado-modal');
-        const textoOriginal = btnEstado.innerHTML;
-        btnEstado.innerHTML = '<i class="bi bi-arrow-repeat spin me-1"></i> Actualizando...';
-        btnEstado.disabled = true;
+        if (filaActual) {
+            filaActual.classList.add('table-warning'); // efecto visual
+        }
 
-        // Realizar petición AJAX
-        fetch(`completarServicio.jsp?id=${idDispositivo}&estado=${encodeURIComponent(nuevoEstado)}`, {
-            method: 'GET',
-            headers: {
-                'Cache-Control': 'no-cache'
-            }
-        })
-        .then(response => {
-            console.log('Respuesta recibida:', response.status);
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Datos recibidos:', data);
-            
-            if (data.exito) {
-                // Actualizar el badge de estado en la tabla
-                const badge = filaActual.querySelector('td span.badge');
-                if (badge) {
-                    badge.className = estadosConfig[nuevoEstado].clase;
-                    badge.innerHTML = `<i class="bi ${estadosConfig[nuevoEstado].icono}"></i> ${nuevoEstado}`;
+        const BASE_URL = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+        const url = `${BASE_URL}cambiarEstado.jsp?id=${encodeURIComponent(idDispositivo)}&estado=${encodeURIComponent(nuevoEstado)}`;
+
+        fetch(url)
+            .then(response => response.text())
+            .then(text => {
+                if (filaActual) filaActual.classList.remove('table-warning');
+
+                if (text.trim() === "OK") {
+                    // Actualiza el estado en la tabla visualmente
+                    const estadoCell = filaActual.querySelector('.celda-estado');
+                    if (estadoCell) {
+                        estadoCell.innerHTML = `<span class="${estadosConfig[nuevoEstado].clase}">
+                            <i class="bi ${estadosConfig[nuevoEstado].icono} me-1"></i> ${nuevoEstado}
+                        </span>`;
+                    }
+                    mostrarModalConfirmacion(nuevoEstado); // opcional si tienes un modal de éxito
+                } else {
+                    alert("Error desde servidor: " + text);
                 }
-
-                // Actualizar el atributo data-estado-actual del botón
-                btnEstado.setAttribute('data-estado-actual', nuevoEstado);
-
-                // Mostrar mensaje de confirmación
-                mostrarModalConfirmacion(nuevoEstado);
-                
-                console.log('Estado actualizado correctamente');
-            } else {
-                throw new Error(data.mensaje || 'Error desconocido');
-            }
-        })
-        .catch(error => {
-            console.error('Error al actualizar estado:', error);
-            alert('Error al actualizar el estado: ' + error.message);
-        })
-        .finally(() => {
-            // Restaurar botón
-            btnEstado.innerHTML = textoOriginal;
-            btnEstado.disabled = false;
-        });
+            })
+            .catch(error => {
+                if (filaActual) filaActual.classList.remove('table-warning');
+                alert('Error de red: ' + error);
+            });
     }
+
+
 
     // Función para mostrar modal de confirmación
     function mostrarModalConfirmacion(nuevoEstado) {

@@ -8,33 +8,98 @@
     <meta charset="UTF-8">
     <title>Iniciar Sesión - TechService</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Fuente Orbitron para look tecnológico -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, rgb(152, 187, 196) 0%, rgb(73, 84, 104) 100%);
+            background: linear-gradient(-45deg, #00ffe7, #1e2a3a, #00bfff, #98bbc4, #232b38, #00ffe7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
         }
 
-        h2 {
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .ts {
             font-size: 2.8rem;
             margin-bottom: 0.5rem;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 2px;
+            color: #fff; /* Cambiado a blanco */
+            text-shadow: 0 2px 12px #00ffe799, 0 0px 2px #222;
         }
-        
+
         .login-card {
             border-radius: 1.5rem;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            background: rgb(227, 243, 255);
+            background: rgba(50, 62, 88, 0.95);
+            border: 1.5px solid #00ffe7;
         }
         .brand-logo {
             width: 90px;
             height: 90px;
             object-fit: cover;
             border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(30,60,114,0.2);
+            box-shadow: 0 2px 8px #00ffe799;
+            border: 2px solid #00ffe7;
+            background: #222;
+        }
+        .form-label, .form-control {
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+            color: #00ffe7;
+            letter-spacing: 1px;
+        }
+        .form-control {
+            background:rgb(51, 70, 100);
+            border: 1.5px solid #00ffe7;
+            color: #00ffe7;
+            font-size: 1.1rem;
+        }
+        .form-control:focus {
+            background: #232b38;
+            border-color: #00ffe7;
+            box-shadow: 0 0 0 0.2rem #00ffe733;
+            color: #00ffe7;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #00ffe7 0%, #00bfff 100%);
+            border: none;
+            color: #232b38;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px #00ffe799;
+            transition: background 0.2s, color 0.2s;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #00bfff 0%, #00ffe7 100%);
+            color: #111;
+        }
+        .alert-danger {
+            background: rgba(255, 0, 80, 0.15);
+            border: 1.5px solid #ff0050;
+            color: #ff0050;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
+        }
+        .text-secondary, .text-muted, small {
+            color: #b0eaff !important;
+            font-family: 'Orbitron', 'Segoe UI', Arial, sans-serif;
         }
     </style>
 </head>
@@ -45,7 +110,7 @@
                 <div class="card login-card p-4">
                     <div class="text-center mb-4">
                         <img src="img/log.jpg" alt="Logo" class="brand-logo mb-2">
-                        <h2 class="fw-bold text-primary">TechService</h2>
+                        <h2 class="ts">TechService</h2>
                         <p class="text-secondary mb-0">Inicia sesión para continuar</p>
                     </div>
                     <% if ("1".equals(error)) { %>

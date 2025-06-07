@@ -192,7 +192,7 @@
                                 <td><%= rs.getString("cliente") %></td>
                                 <td><%= rs.getString("tipo_dispositivo") %> <%= rs.getString("marca") %> <%= rs.getString("modelo") %></td>
                                 <td><%= rs.getString("problema_reportado").length() > 30 ? rs.getString("problema_reportado").substring(0, 30) + "..." : rs.getString("problema_reportado") %></td>
-                                <td><span class="<%= estadoClass %>"><i class="bi <%= estadoIcono %>"></i> <%= rs.getString("estado") %></span></td>
+                                <td class="celda-estado"><span class="<%= estadoClass %>"><i class="bi <%= estadoIcono %>"></i> <%= rs.getString("estado") %></span></td>
                                 <td><%= rs.getString("fecha") %></td>
                                 <td>
                                     <!-- Botón para ver detalles del servicio (ojito) -->
